@@ -1,11 +1,19 @@
 {% extends "base.html" %}
-
-{% block title %}Create Star{% endblock %}
-
 {% block content %}
-<form action="" method="POST">
+<h2>Create Star</h2>
+<form action="" method="POST" class="star-form">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit">
+    <div class="form-group">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+        {% if form.name.errors %}
+            <div class="error">
+                {% for error in form.name.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <input type="submit" value="Submit" class="btn btn-primary">
 </form>
 {% endblock %}
