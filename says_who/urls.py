@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import star
+from .views import star, quote
 
 urlpatterns = [
-    path('star/', star, name="create-star")
+    path('star/', star, name="create-star"),
+    path('quote/', quote, name="create-quote"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

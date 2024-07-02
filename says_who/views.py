@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from .models import Star, Question, Quote
-from .forms import StarForm
+from .forms import StarForm, QuoteForm
 
 
 def star(request):
@@ -19,3 +19,20 @@ def star(request):
     else:
         form = StarForm()
     return render(request, 'star.html', {"form": form})
+
+def quote(request):
+    if request.method == "POST":
+        form = QuoteForm(request.POST)
+        if form.is_valid():
+            quote = form.cleaned_data['quote']
+            star = form.cleaned_data['star']
+            print(star, quote)
+            form.save()
+            return HttpResponse("Quote Added to the Star Successfully.")
+        
+        else:
+            form.add_error(request, "Error submitting the form. Please correct the data.")
+    
+    else:
+        form = QuoteForm()
+        return render(request, 'quote.html', {'form':form})
