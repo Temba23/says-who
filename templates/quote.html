@@ -3,6 +3,7 @@
 <h2>Create Quote</h2>
 <form action="" method="POST" class="star-form">
     {% csrf_token %}
+    
     {% if messages %}
         <ul>
         {% for message in messages %}
@@ -10,11 +11,31 @@
         {% endfor %}
         </ul>
     {% endif %}
+    
+    <div class="form-group">
+        {{ form.star.label_tag }}
+        {{ form.star }}
+        {% if form.star.errors %}
+            <div class="error">
+                {% for error in form.star.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
+    <div class="form-group">
+        {{ form.quote.label_tag }}
+        {{ form.quote }}
+        {% if form.quote.errors %}
+            <div class="error">
+                {% for error in form.quote.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <input type="submit" value="Submit" class="btn btn-primary">
 </form>
 {% endblock %}
