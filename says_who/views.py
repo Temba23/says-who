@@ -26,6 +26,8 @@ def quote(request):
         if form.is_valid():
             quote = form.cleaned_data['quote']
             star = form.cleaned_data['star']
+            if Quote.objects.filter(star=star).exists():
+                return HttpResponse(f"Quote for {star} already exists.")
             print(star, quote)
             form.save()
             return HttpResponse("Quote Added to the Star Successfully.")
