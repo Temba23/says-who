@@ -1,6 +1,7 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from .models import Star, Question, Quote
-from .forms import StarForm, QuoteForm
+from .forms import StarForm, QuoteForm, QuestionForm
+from django.contrib import messages
 
 
 def star(request):
@@ -13,7 +14,8 @@ def star(request):
                 return render(request, 'star.html', {"form": form})
             else:
                 Star.objects.create(name=star_name)
-                return HttpResponse("Star Created Successfully.")
+                messages.success(request, f"{star_name} created successfully.")
+                return redirect("create-quote")
         else:
             return render(request, 'star.html', {"form": form})
     else:
@@ -38,3 +40,14 @@ def quote(request):
     else:
         form = QuoteForm()
         return render(request, 'quote.html', {'form':form})
+    
+def question(request):
+    if request.method == "POST":
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("Success.")
+
+    else:
+        form = QuestionForm()
+        return render(request, 'question.html', {'form':form})

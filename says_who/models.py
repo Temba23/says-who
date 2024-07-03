@@ -20,4 +20,4 @@ class Question(models.Model):
     star = models.ForeignKey(Star, related_name='star_question', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Was "{self.quote.text}" said by {self.presented_star.name}?'
+        return f'Who said "{self.quote}"?'

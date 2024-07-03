@@ -1,5 +1,5 @@
 from django import forms
-from .models import Quote
+from .models import Quote, Question
 class StarForm(forms.Form):
     name = forms.CharField(
         label="Star name",
@@ -14,4 +14,13 @@ class QuoteForm(forms.ModelForm):
         labels = {
             'star':'Star',
             'quote':'Quote'
+        }
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = "__all__"
+        label = {
+            'star' : 'Star',
+            'quote' : 'Quote'
         }

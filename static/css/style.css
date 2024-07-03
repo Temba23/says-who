@@ -20,6 +20,12 @@ h2 {
     margin-bottom: 20px;
 }
 
+h3 {
+    text-align: center;
+    color: yellowgreen;
+    margin-bottom: 20px;
+}
+
 .star-form {
     max-width: 400px;
     margin: 0 auto;
