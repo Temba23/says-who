@@ -14,7 +14,7 @@ def star(request):
                 return render(request, 'star.html', {"form": form})
             else:
                 Star.objects.create(name=star_name)
-                messages.success(request, f"{star_name} created successfully.")
+                messages.success(request, f"{star_name} created successfully. Create a Quote for {star_name}.")
                 return redirect("create-quote")
         else:
             return render(request, 'star.html', {"form": form})
@@ -29,10 +29,14 @@ def quote(request):
             quote = form.cleaned_data['quote']
             star = form.cleaned_data['star']
             if Quote.objects.filter(star=star).exists():
-                return HttpResponse(f"Quote for {star} already exists.")
+                messages.error(request, f"Quote already exists for {star}")
+                return redirect('create-quote')
             print(star, quote)
-            form.save()
-            return HttpResponse("Quote Added to the Star Successfully.")
+            quote_instance = form.save()
+            print(quote_instance)
+            Question.objects.create(star=star, quote=quote_instance)
+            messages.success(request, f'Quote created successfully for {star}.')
+            return redirect('create-quote')
         
         else:
             form.add_error(request, "Error submitting the form. Please correct the data.")
@@ -45,8 +49,17 @@ def question(request):
     if request.method == "POST":
         form = QuestionForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponse("Success.")
+            quote = form.cleaned_data['quote']
+            star = form.cleaned_data['star']
+            if Question.objects.filter(quote=quote, star=star).exists():
+                messages.error(request, f"Question already exists for {star}")
+
+            if Quote.objects.filter(star=star, quote=quote).exists():
+                form.save()
+                messages.success(request, f'{Question} created successfully.')                
+            else:
+                messages.error(request, f"'{quote}' doesn't match with {star}'s Quote.")
+            return redirect('create-question')
 
     else:
         form = QuestionForm()

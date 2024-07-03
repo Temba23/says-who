@@ -10,16 +10,16 @@ class StarForm(forms.Form):
 class QuoteForm(forms.ModelForm):
     class Meta:
         model = Quote
-        fields = '__all__'
-        labels = {
-            'star':'Star',
-            'quote':'Quote'
+        fields = ['star', 'quote']
+        label = {
+            'star' : 'Star',
+            'quote' : 'Quote'
         }
 
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = "__all__"
+        fields = '__all__'
         label = {
             'star' : 'Star',
             'quote' : 'Quote'
