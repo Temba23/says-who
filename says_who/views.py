@@ -1,8 +1,8 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from .models import Star, Question, Quote
-from .forms import StarForm, QuoteForm, QuestionForm
+from .forms import StarForm, QuoteForm
 from django.contrib import messages
-
+import random
 
 def star(request):
     if request.method == "POST":
@@ -64,10 +64,31 @@ def quote(request):
 #         return render(request, 'question.html', {'form':form})
     
 def game(request):  
-    if request.method == "POST":
-        return HttpResponse("POST")
+    question = Question.objects.order_by('?').first()
+    correct_answer = question.star
+
+    incorrect_answers = Star.objects.exclude(id=correct_answer.id).order_by('?')[:3]
+
+    answers = list(incorrect_answers) + [correct_answer]
+    random.shuffle(answers)
+
+    if request.method == 'POST':
+        selected_answer_id = request.POST.get('answer')
+        selected_answer = get_object_or_404(Star, id=selected_answer_id)
+        if selected_answer == correct_answer:
+            result = "Correct!"
+        else:
+            result = "Incorrect. The correct answer was " + correct_answer.name + "."
+
+        context = {
+            'question': question,
+            'answers': answers,
+            'result': result
+        }
     else:
-        question = Question.objects.all()
-        correct_answer = question.quote
-        
-        return render(request, 'game.html', {'question':question})
+        context = {
+            'question': question,
+            'answers': answers
+        }
+    
+    return render(request, 'game.html', context)

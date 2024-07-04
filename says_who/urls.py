@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import star, quote, question, game
+from .views import star, quote, game
 
 urlpatterns = [
     path('star/', star, name="create-star"),

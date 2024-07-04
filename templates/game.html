@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 
 {% block title %}
-Quote Game
+<h2>Quote Game</h2>
 {% endblock %}
 
 {% block content %}
-<h1>Who said this quote?</h1>
-<p>{{ question.quote.quote }}</p>
+<h2>Who said this quote?</h2>
+<h3> - {{ question.quote.quote }}</h3>
 
-<form method="post">
+<form method="post", class='star-form'>
     {% csrf_token %}
     {% for answer in answers %}
         <input type="radio" name="answer" value="{{ answer.id }}"> {{ answer.name }}<br>
     {% endfor %}
-    <button type="submit">Submit</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
 {% if result %}
-    <p>{{ result }}</p>
+    <p class='result'> {{ result }}</p>
 {% endif %}
 {% endblock %}
