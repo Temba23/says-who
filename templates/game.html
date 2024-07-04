@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quote Game
+{% endblock %}
+
+{% block content %}
+<h1>Who said this quote?</h1>
+<p>{{ question.quote.quote }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {% for answer in answers %}
+        <input type="radio" name="answer" value="{{ answer.id }}"> {{ answer.name }}<br>
+    {% endfor %}
+    <button type="submit">Submit</button>
+</form>
+
+{% if result %}
+    <p>{{ result }}</p>
+{% endif %}
+{% endblock %}

@@ -16,11 +16,14 @@ class QuoteForm(forms.ModelForm):
             'quote' : 'Quote'
         }
 
-class QuestionForm(forms.ModelForm):
-    class Meta:
-        model = Question
-        fields = '__all__'
-        label = {
-            'star' : 'Star',
-            'quote' : 'Quote'
-        }
+class QuestionForm(forms.Form):
+    star = forms.CharField(
+        label="Star",
+        max_length=30,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    quote = forms.CharField(
+        label="Quote",
+        max_length=30,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )

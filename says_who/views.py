@@ -45,22 +45,29 @@ def quote(request):
         form = QuoteForm()
         return render(request, 'quote.html', {'form':form})
     
-def question(request):
+# def question(request):
+#     if request.method == "POST":
+#         form = QuestionForm(request.POST)
+#         if form.is_valid():
+#             quote = form.cleaned_data['quote']
+#             star = form.cleaned_data['star']
+#             if Question.objects.filter(star=star).exists():
+#                 messages.error(request, f"Question already exists for {star}")   
+#             else:
+#                 s_instance = Star.objects.create(name=star)
+#                 Quote.objects.create(star=s_instance, quote=quote)
+#                 messages.success(request, f'{Question} created successfully.') 
+#             return redirect('create-question')
+
+#     else:
+#         form = QuestionForm()
+#         return render(request, 'question.html', {'form':form})
+    
+def game(request):  
     if request.method == "POST":
-        form = QuestionForm(request.POST)
-        if form.is_valid():
-            quote = form.cleaned_data['quote']
-            star = form.cleaned_data['star']
-            if Question.objects.filter(quote=quote, star=star).exists():
-                messages.error(request, f"Question already exists for {star}")
-
-            if Quote.objects.filter(star=star, quote=quote).exists():
-                form.save()
-                messages.success(request, f'{Question} created successfully.')                
-            else:
-                messages.error(request, f"'{quote}' doesn't match with {star}'s Quote.")
-            return redirect('create-question')
-
+        return HttpResponse("POST")
     else:
-        form = QuestionForm()
-        return render(request, 'question.html', {'form':form})
+        question = Question.objects.all()
+        correct_answer = question.quote
+        
+        return render(request, 'game.html', {'question':question})
