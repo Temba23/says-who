@@ -92,3 +92,31 @@ def game(request):
         }
     
     return render(request, 'game.html', context)
+
+def load_question(request):
+    stars = ['Henry Ford', 'Wayne Gretzky', 'Confucius', 'Vincent Van Gogh', 'Thomas Edison', 'Abraham Lincoln', 'Maya Angelou', 'John Wooden',
+             'Bob Marley', 'Babe Ruth', 'Aristotle', 'Helen Keller', 'Nelson Mandela', 'Charles Dickens', 'J.Cole', 'K.Dot'
+             ]
+    quotes = [
+        'Whether you think you can or you think you cant, you are right.',
+        'You miss 100% of the shots you dont take.',
+        'It does not matter how slowly you go as long as you do not stop.',
+        'I would rather die of passion than of boredom.',
+        'There is no substitute for hard work.',
+        "In the end, it's not the years in your life that count. It's the life in your years.",
+        "You will face many defeats in life, but never let yourself be defeated.",
+        'Do not let making a living prevent you from making a life.',
+        'Love the life you live. Live the life you love.',
+        'Never let the fear of striking out keep you from playing the game.',
+        'Love is composed of a single soul inhabiting two bodies.',
+        "Life is either a daring adventure or nothing at all.",
+        'The greatest glory in living lies not in never falling, but in rising every time we fall.',
+        "Life is made of ever so many partings welded together.",
+        "I'd rather be happy being myself than sad trying to please everyone else.",
+        "Trynna strike a cord and its probably a minor."
+    ]
+    params = zip(stars, quotes)
+    questions = [Question(star=param[0], quote=param[1]) for param in params]
+    Question.objects.bulk_create(questions)
+    messages.success(request, "Questions were added successfully.")
+    return redirect('game')
