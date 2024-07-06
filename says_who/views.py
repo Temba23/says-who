@@ -94,12 +94,11 @@ def game(request):
     return render(request, 'game.html', context)
 
 def load_question(request):
-    stars = ['Henry Ford', 'Wayne Gretzky', 'Confucius', 'Vincent Van Gogh', 'Thomas Edison', 'Abraham Lincoln', 'Maya Angelou', 'John Wooden',
-             'Bob Marley', 'Babe Ruth', 'Aristotle', 'Helen Keller', 'Nelson Mandela', 'Charles Dickens', 'J.Cole', 'K.Dot'
-             ]
-    quotes = [
-        'Whether you think you can or you think you cant, you are right.',
-        'You miss 100% of the shots you dont take.',
+    stars_text = ['Henry Ford', 'Wayne Gretzky', 'Confucius', 'Vincent Van Gogh', 'Thomas Edison', 'Abraham Lincoln', 'Maya Angelou', 'John Wooden',
+             'Bob Marley', 'Babe Ruth', 'Aristotle', 'Helen Keller', 'Nelson Mandela', 'Charles Dickens', 'J.Cole', 'K.Dot']
+    quotes_text = [
+        'Whether you think you can or you think you can’t, you are right.',
+        'You miss 100% of the shots you don’t take.',
         'It does not matter how slowly you go as long as you do not stop.',
         'I would rather die of passion than of boredom.',
         'There is no substitute for hard work.',
@@ -113,10 +112,21 @@ def load_question(request):
         'The greatest glory in living lies not in never falling, but in rising every time we fall.',
         "Life is made of ever so many partings welded together.",
         "I'd rather be happy being myself than sad trying to please everyone else.",
-        "Trynna strike a cord and its probably a minor."
+        "Trynna strike a cord and it's probably a minor."
     ]
-    params = zip(stars, quotes)
-    questions = [Question(star=param[0], quote=param[1]) for param in params]
-    Question.objects.bulk_create(questions)
-    messages.success(request, "Questions were added successfully.")
-    return redirect('game')
+    try:
+        stars = [Star(name=star) for star in stars_text]
+        Star.objects.bulk_create(stars)
+        
+        stars_from_db = Star.objects.filter(name__in=stars_text)
+        star_dict = {star.name: star for star in stars_from_db}
+        print(star_dict)
+
+        quotes = [Quote(star=star_dict[star], quote=quote) for star, quote in zip(stars_text, quotes_text)]
+        Quote.objects.bulk_create(quotes)
+        
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('create-quote')
+    messages.success(request, "Successfully Created Questions.")
+    return redirect('create-quote')

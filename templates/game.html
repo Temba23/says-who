@@ -5,6 +5,16 @@
 {% endblock %}
 
 {% block content %}
+
+{% if messages %}
+<ul>
+{% for message in messages %}
+    <h3{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</h3>
+{% endfor %}
+</ul>
+{% endif %}
+
+
 <h2>Who said this quote?</h2>
 <h3> - {{ question.quote.quote }}</h3>
 
