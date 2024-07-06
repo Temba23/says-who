@@ -94,7 +94,10 @@ def game(request):
     return render(request, 'game.html', context)
 
 def load_question(request):
-    stars_text = ['Henry Ford', 'Wayne Gretzky', 'Confucius', 'Vincent Van Gogh', 'Thomas Edison', 'Abraham Lincoln', 'Maya Angelou', 'John Wooden',
+    """
+        First Creating an instance because of ForeignKey, Then filtering the name from db and using dictionary comprehension for next model.
+    """
+    stars_name = ['Henry Ford', 'Wayne Gretzky', 'Confucius', 'Vincent Van Gogh', 'Thomas Edison', 'Abraham Lincoln', 'Maya Angelou', 'John Wooden',
              'Bob Marley', 'Babe Ruth', 'Aristotle', 'Helen Keller', 'Nelson Mandela', 'Charles Dickens', 'J.Cole', 'K.Dot']
     quotes_text = [
         'Whether you think you can or you think you can’t, you are right.',
@@ -115,16 +118,23 @@ def load_question(request):
         "Trynna strike a cord and it's probably a minor."
     ]
     try:
-        stars = [Star(name=star) for star in stars_text]
+        
+        stars = [Star(name=star) for star in stars_name]
         Star.objects.bulk_create(stars)
         
-        stars_from_db = Star.objects.filter(name__in=stars_text)
+        stars_from_db = Star.objects.filter(name__in=stars_name)
         star_dict = {star.name: star for star in stars_from_db}
         print(star_dict)
 
-        quotes = [Quote(star=star_dict[star], quote=quote) for star, quote in zip(stars_text, quotes_text)]
+        quotes = [Quote(star=star_dict[star], quote=quote) for star, quote in zip(stars_name, quotes_text)]
         Quote.objects.bulk_create(quotes)
+
+        quotes_from_db = Quote.objects.filter(quote__in=quotes_text)
+        quote_dict = {quote.quote: quote for quote in quotes_from_db}
         
+        questions = [Question(star=star_dict[star], quote=quote_dict[quote]) for star, quote in zip(stars_name, quotes_text)]
+        Question.objects.bulk_create(questions)
+
     except Exception as e:
         messages.error(request, str(e))
         return redirect('create-quote')
