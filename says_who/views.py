@@ -45,52 +45,35 @@ def quote(request):
         form = QuoteForm()
         return render(request, 'quote.html', {'form':form})
     
-# def question(request):
-#     if request.method == "POST":
-#         form = QuestionForm(request.POST)
-#         if form.is_valid():
-#             quote = form.cleaned_data['quote']
-#             star = form.cleaned_data['star']
-#             if Question.objects.filter(star=star).exists():
-#                 messages.error(request, f"Question already exists for {star}")   
-#             else:
-#                 s_instance = Star.objects.create(name=star)
-#                 Quote.objects.create(star=s_instance, quote=quote)
-#                 messages.success(request, f'{Question} created successfully.') 
-#             return redirect('create-question')
-
-#     else:
-#         form = QuestionForm()
-#         return render(request, 'question.html', {'form':form})
-    
-def game(request):  
-    question = Question.objects.order_by('?').first()
-    correct_answer = question.star
-
-    incorrect_answers = Star.objects.exclude(id=correct_answer.id).order_by('?')[:3]
-
-    answers = list(incorrect_answers) + [correct_answer]
-    random.shuffle(answers)
-
+def game(request):
     if request.method == 'POST':
+        question_id = request.session.get('question_id')
+        question = get_object_or_404(Question, id=question_id)
+        correct_answer = question.star
+
         selected_answer_id = request.POST.get('answer')
         selected_answer = get_object_or_404(Star, id=selected_answer_id)
         if selected_answer == correct_answer:
-            result = "Correct!"
+            messages.success(request, f'{selected_answer} is correct! 🎇')
         else:
-            result = "Incorrect. The correct answer was " + correct_answer.name + "."
+            messages.error(request, f'{selected_answer} is incorrect! 👎')
+        return redirect('game')
 
-        context = {
-            'question': question,
-            'answers': answers,
-            'result': result
-        }
     else:
+        question = Question.objects.order_by('?').first()
+        request.session['question_id'] = question.id
+        correct_answer = question.star
+
+        incorrect_answers = Star.objects.exclude(id=correct_answer.id).order_by('?')[:3]
+
+        answers = list(incorrect_answers) + [correct_answer]
+        random.shuffle(answers)
+
         context = {
             'question': question,
             'answers': answers
         }
-    
+
     return render(request, 'game.html', context)
 
 def load_question(request):
