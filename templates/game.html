@@ -25,6 +25,7 @@ Quote Game
 
 <form method="POST" class='star-form'>
     {% csrf_token %}
+    <input type="hidden" name="lifeline" value="{{ lifeline }}">
     {% for answer in answers %}
         <input type="radio" name="answer" value="{{ answer.id }}"> {{ answer.name }}<br>
     {% endfor %}
