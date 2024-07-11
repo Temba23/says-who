@@ -23,4 +23,4 @@ class Question(models.Model):
         return f'Who said "{self.quote}"?'
 
 class Life(models.Model):
-    life = models.IntegerField(max_length=2)
+    life = models.IntegerField(max_length=2, default=3)

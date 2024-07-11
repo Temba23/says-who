@@ -47,23 +47,43 @@ def quote(request):
     
 def game(request):
     if request.method == 'POST':
-        question_id = request.session.get('question_id')
         life_id = request.session.get('life')
         life_count = get_object_or_404(Life, id=life_id)
-        question = get_object_or_404(Question, id=question_id)
-        correct_answer = question.star
 
+        if life_count <=0 :
+            messages.error('Life Counts finished. Play Again!')
+            return redirect('over')
+        
         selected_answer_id = request.POST.get('answer')
         selected_answer = get_object_or_404(Star, id=selected_answer_id)
+
+        question_id = request.session.get('question_id')
+        question = get_object_or_404(Question, id=question_id)
+        correct_answer = question.star
+        
+
         if selected_answer == correct_answer:
             messages.success(request, f'{selected_answer} is correct! 🎇')
         else:
-            life_count.life += 1
+            life_count.life -= 1
             life_count.save()
             messages.error(request, f'{selected_answer} is incorrect! 👎')
         return redirect('game')
 
     else:
+        life_id = request.session.get('life_id')
+        if not life_id:
+            # Initialize the lifeline count for the session if it doesn't exist
+            life_count = Life.objects.create(life=3)
+            request.session['life_id'] = life_count.id
+        else:
+            life_count = get_object_or_404(Life, id=life_id)
+
+        # Check if player has remaining lifelines
+        if life_count.life <= 0:
+            messages.error(request, 'No more lifelines remaining. Game over!')
+            return redirect('over') 
+        
         question = Question.objects.order_by('?').first()
         request.session['question_id'] = question.id
         correct_answer = question.star
@@ -75,7 +95,8 @@ def game(request):
 
         context = {
             'question': question,
-            'answers': answers
+            'answers': answers,
+            'lifeline':life_count.life
         }
 
     return render(request, 'game.html', context)
@@ -127,3 +148,7 @@ def load_question(request):
         return redirect('create-quote')
     messages.success(request, "Successfully Created Questions.")
     return redirect('create-quote')
+
+
+def game_over(request):
+    return render(request, 'over.html')
