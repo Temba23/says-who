@@ -21,3 +21,6 @@ class Question(models.Model):
 
     def __str__(self):
         return f'Who said "{self.quote}"?'
+
+class Life(models.Model):
+    life = models.IntegerField(max_length=2)

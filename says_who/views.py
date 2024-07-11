@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from .models import Star, Question, Quote
+from .models import Star, Question, Quote, Life
 from .forms import StarForm, QuoteForm
 from django.contrib import messages
 import random
@@ -48,6 +48,8 @@ def quote(request):
 def game(request):
     if request.method == 'POST':
         question_id = request.session.get('question_id')
+        life_id = request.session.get('life')
+        life_count = get_object_or_404(Life, id=life_id)
         question = get_object_or_404(Question, id=question_id)
         correct_answer = question.star
 
@@ -56,6 +58,8 @@ def game(request):
         if selected_answer == correct_answer:
             messages.success(request, f'{selected_answer} is correct! 🎇')
         else:
+            life_count.life += 1
+            life_count.save()
             messages.error(request, f'{selected_answer} is incorrect! 👎')
         return redirect('game')
 
