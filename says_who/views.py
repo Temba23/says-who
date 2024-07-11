@@ -155,3 +155,10 @@ def load_question(request):
 
 def game_over(request):
     return render(request, 'over.html')
+
+def regame(request):
+    life_id = request.session.get('life_id')
+    life_count = get_object_or_404(Life, id=life_id)
+    life_count.life = 3
+    life_count.save()
+    return redirect('game')

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import star, quote, game, load_question, game_over
+from .views import star, quote, game, load_question, game_over, regame
 
 urlpatterns = [
     path('star/', star, name="create-star"),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('question/', load_question, name="create-question"),
     path('game/', game, name="game"),
     path('over/', game_over, name="over"),
+    path('again/', regame, name="again"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
