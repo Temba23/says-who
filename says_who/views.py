@@ -47,10 +47,7 @@ def quote(request):
     
 def game(request):
     if request.method == 'POST':
-        print(request)
-        print(request.POST)
         life_id = request.session.get('life_id')
-        print(life_id)
         life_count = get_object_or_404(Life, id=life_id)
 
         if life_count.life <= 0:
@@ -66,6 +63,7 @@ def game(request):
 
         if selected_answer == correct_answer:
             life_count.points += 1
+            life_count.save()
             messages.success(request, f'{selected_answer} is correct! 🎇')
         else:
             life_count.life -= 1
