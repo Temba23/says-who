@@ -24,3 +24,4 @@ class Question(models.Model):
 
 class Life(models.Model):
     life = models.IntegerField(max_length=2, default=3)
+    points = models.IntegerField(max_length=3, default=0)

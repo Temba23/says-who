@@ -65,6 +65,7 @@ def game(request):
         correct_answer = question.star
 
         if selected_answer == correct_answer:
+            life_count.points += 1
             messages.success(request, f'{selected_answer} is correct! 🎇')
         else:
             life_count.life -= 1
@@ -77,10 +78,10 @@ def game(request):
         life_id = request.session.get('life_id')
         if not life_id:
             # Initialize the lifeline count for the session if it doesn't exist
-            life_count = Life.objects.create(life=3)
+            life_count = Life.objects.create(life=3, points=0)
             request.session['life_id'] = life_count.id
         else:
-            life_count = get_object_or_404(Life, id=life_id)
+            life_count = get_object_or_404(Life, id=life_id) 
 
         # Check if player has remaining lifelines
         if life_count.life <= 0:
@@ -99,7 +100,8 @@ def game(request):
         context = {
             'question': question,
             'answers': answers,
-            'lifeline': life_count.life
+            'lifeline': life_count.life,
+            'points':life_count.points
         }
 
     return render(request, 'game.html', context)
