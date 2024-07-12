@@ -1,9 +1,10 @@
-                                        SAYS WHO?
+                                            SAYS WHO?
 In this project, I have created a game project where the user have to answer the mcq questions where the quote of any star is a question
 and player have to give the answer. Player has 3 lifelines and with each incorrect answer it decreases whereas with correct answers 
 increases points.
 
-![alt text](image.png)
+![image](https://github.com/user-attachments/assets/6e3177af-bc84-424e-b4c5-e49ceb37dc70)
+
 
 To play this game :
 
