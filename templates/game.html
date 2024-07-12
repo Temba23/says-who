@@ -14,16 +14,25 @@ Quote Game
 </ul>
 {% endif %}
 
-{% if lifeline <= 0 %}
-    <h3>No more lifelines remaining. Game over!</h3>
-    <a href="{% url 'game_over' %}">Restart Game</a>
-{% else %}
-    <h3>Remaining Lifelines: {{ lifeline }}</h3>
-
-<h3>    Score  - {{ points }}</h3>
-
-
 <h2>Who said this quote?</h2>
+
+<div class="score-container">
+    <div class="score">
+        <div class="lifeline">
+            {% if lifeline <= 0 %}
+                <h4>No more lifelines remaining. Game over!</h4>
+                <a href="{% url 'game_over' %}">Restart Game</a>
+            {% else %}
+                <h4>Remaining Lifelines - {{ lifeline }}</h4>
+            {% endif %}
+        </div>
+        <div class="points">
+            <h4>Score - {{ points }}</h4>
+        </div>
+    </div>
+</div>
+
+
 <h3> - {{ question.quote.quote }}</h3>
 
 <form method="POST" class='star-form'>
@@ -34,6 +43,5 @@ Quote Game
     {% endfor %}
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-{% endif %}
 
 {% endblock %}

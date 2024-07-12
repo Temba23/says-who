@@ -1,5 +1,6 @@
 body {
     font-family: Arial, sans-serif;
+    font-size: 20px;
     background-color: grey;
     margin: 0;
     padding: 0;
@@ -82,4 +83,27 @@ h3 {
 .result {
     font-weight: 700;
     text-align: center;
+}
+
+.score-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.score {
+    font-weight: 600;
+    color: black;
+    width: 100%;
+    display: flex;
+    justify-content:space-around;
+}
+
+.lifeline {
+    text-align: left;
+}
+
+.points {
+    text-align: right;
+    color : black;
+    
 }
